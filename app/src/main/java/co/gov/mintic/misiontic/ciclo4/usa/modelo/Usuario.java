@@ -1,6 +1,8 @@
 package co.gov.mintic.misiontic.ciclo4.usa.modelo;
 
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario  implements Serializable {
 
     private String cedula;
     private String nombre;

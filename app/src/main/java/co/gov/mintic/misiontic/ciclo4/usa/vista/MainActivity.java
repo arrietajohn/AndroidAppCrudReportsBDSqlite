@@ -1,13 +1,16 @@
-package co.gov.mintic.misiontic.ciclo4.usa;
+package co.gov.mintic.misiontic.ciclo4.usa.vista;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.material.snackbar.Snackbar;
+
 
 import co.gov.mintic.misiontic.ciclo4.usa.modelo.CrudUsuario;
 import co.gov.mintic.misiontic.ciclo4.usa.modelo.GestionDeBD;
@@ -15,20 +18,15 @@ import co.gov.mintic.misiontic.ciclo4.usa.modelo.Usuario;
 
 public class MainActivity extends AppCompatActivity {
 
+    GestionDeBD mibd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String sql = "Insert into Usuarios VALUES('123','abc','Fulanito de tal','fulanito@gmail.com')";
-        GestionDeBD mibd = new GestionDeBD(this);
-       // mibd.insertar(sql);
-        Cursor resultado = mibd.consultar("Select * FROM Usuarios");
-        if(resultado != null && resultado.moveToFirst()){
-            String nombre = resultado.getString(2);
-            System.out.println("NOMBRE: "+nombre);
-            System.out.println("EMAIL: "+resultado.getString(3));
-            System.out.println("CLAVE: "+resultado.getString(1));
-        }
+       mibd = new GestionDeBD(this);
+
+
     }
 
     public void iniciarSesion(View v){
@@ -42,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
                     .setBackgroundTint(getResources().getColor(R.color.mensaje_ok_fondo))
                     .setTextColor(getResources().getColor(R.color.mensaje_ok_letra))
                     .show();
+            Intent i = new Intent(this, ActividadCrudUsuario.class);
+            Bundle datos = new Bundle();
+            datos.putSerializable("user.login",u);
+            i.putExtras(datos);
+            startActivity(i);
         }
         else{
             Snackbar.make(v, "ACCESO NEGADO ",Snackbar.LENGTH_LONG)
@@ -50,4 +53,5 @@ public class MainActivity extends AppCompatActivity {
                     .show();
         }
     }
+
 }

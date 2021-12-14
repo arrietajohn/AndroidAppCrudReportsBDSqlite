@@ -14,6 +14,7 @@ public class GestionDeBD extends SQLiteOpenHelper {
 
 
     public GestionDeBD(Context actividad){
+
         super(actividad, sqlNombreBD, null, 1);
     }
     public GestionDeBD(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
@@ -30,12 +31,12 @@ public class GestionDeBD extends SQLiteOpenHelper {
 
     }
 
-    public void insertar(String sql){
+    public void modificarBD(String sql){
         SQLiteDatabase bd = this.getWritableDatabase();
         bd.execSQL(sql);
     }
 
-    public Cursor consultar(String sql){
+    public Cursor consultarBD(String sql){
         SQLiteDatabase bd = this.getReadableDatabase();
         return bd.rawQuery(sql, null);
     }

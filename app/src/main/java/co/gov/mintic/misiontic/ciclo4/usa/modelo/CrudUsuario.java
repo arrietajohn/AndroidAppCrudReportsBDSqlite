@@ -1,6 +1,7 @@
 package co.gov.mintic.misiontic.ciclo4.usa.modelo;
 
 import android.database.Cursor;
+import android.util.Log;
 
 public class CrudUsuario {
 
@@ -16,14 +17,26 @@ public class CrudUsuario {
                 "'"+u.getClave()+"'," +
                 "'"+u.getNombre()+"'," +
                 "'"+u.getEmail()+"')";
-        conexionBD.insertar(sqlInsert);
+
+        Log.e("INSERT", sqlInsert);
+        conexionBD.modificarBD(sqlInsert);
+
+    }
+
+    public void actualizar(Usuario userUpdate){
+        String sqlUpdate = "UPDATE Usuarios " +
+                "SET clave = '"+userUpdate.getClave()+"'," +
+                " emil = '"+userUpdate.getEmail()+"' " +
+                "WHERE cedula = '"+userUpdate.getCedula()+"'";
+        conexionBD.modificarBD(sqlUpdate);
     }
 
     public Usuario consultarPorCedula(String cc){
         Usuario u = null;
         String sqlSelect = "SELECT * FROM Usuarios " +
                 "WHERE cedula = '"+cc+"'";
-        Cursor resultado = conexionBD.consultar(sqlSelect);
+        Log.e("SELECT", sqlSelect);
+        Cursor resultado = conexionBD.consultarBD(sqlSelect);
         if(resultado != null && resultado.moveToFirst()){
             u = new Usuario();
             u.setCedula(resultado.getString(0));
@@ -39,7 +52,7 @@ public class CrudUsuario {
         Usuario u = null;
         String sqlSelect = "SELECT * FROM Usuarios " +
                 "WHERE emil = '"+email+"' AND clave = '"+clave+"'";
-        Cursor resultado = conexionBD.consultar(sqlSelect);
+        Cursor resultado = conexionBD.consultarBD(sqlSelect);
         if(resultado != null && resultado.moveToFirst()){
             u = new Usuario();
             u.setCedula(resultado.getString(0));
@@ -48,5 +61,17 @@ public class CrudUsuario {
             u.setEmail(resultado.getString(3));
         }
         return u;
+    }
+
+    public void eliminar(String cc) throws Exception{
+        Usuario u = consultarPorCedula(cc);
+        if(u != null){
+            String sqlDelete = "DELETE FROM Usuarios " +
+                                "WHERE cedula = '"+cc+"'";
+            conexionBD.modificarBD(sqlDelete);
+        }
+        else{
+            throw new Exception("Usuario con Cedual: "+cc+ " no existe");
+        }
     }
 }
